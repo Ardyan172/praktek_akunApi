@@ -9,5 +9,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/transaction', [TransactionController::class, 'index']);
+// menampilkan data dari table
+Route::post('/transaction/store', [TransactionController::class, 'store']);
+// untuk menambahkan data
+Route::get('/transaction/show/{id}', [TransactionController::class, 'show']);
+// menampilkan data berdasarkan id
+Route::get('/transaction/destroy/{id}', [TransactionController::class, 'destroy']);
 
 

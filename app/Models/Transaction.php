@@ -12,4 +12,19 @@ class Transaction extends Model
     {
         return DB::table('transactions')->orderBy('waktu', 'desc')->get();
     }
+
+    public function addData($request)
+    {
+        return DB::table('transactions')->insert($request);
+    }
+
+    public function showData($id)
+    {
+        return DB::table('transactions')->find($id);
+    }
+
+    public function deleteLah($id) 
+    {
+        return DB::table('transactions')->delete($id);
+    }
 }

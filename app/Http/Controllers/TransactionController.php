@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+// vendor/symfony/http-foundation/Response
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 
@@ -50,7 +53,29 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validasi dulu
+        $validasiData = $request->validate([
+            'nama' => ['required', 'max:50'],
+            'jumlah' => ['required', 'numeric'],
+            'type' => [
+                'required', 
+                Rule::in(['pemasukan', 'pengeluaran']) 
+            ]
+        ]);
+
+        try {
+            $tambahData = $this->Transaction->addData($request->all());
+
+            $response = [
+                'message' => 'Data berhasil ditambah',
+                'data' =>  $tambahData
+            ];
+
+            return response()->json($response, Response::HTTP_CREATED);
+        } catch (queryException $e) {
+            // kalau gagal maka tangkap pengecualian query nya
+            return response()->json('coba kegagalan ' . $e->errorInfo);
+        }
     }
 
     /**
@@ -61,7 +86,17 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        //
+        // cari data berdasarkan id
+        $detailData = $this->Transaction->showData($id);
+
+        // lalu buat response
+        $response = [
+            'message' => 'Detail transaksi ' . $detailData->nama,
+            'data' => $detailData
+        ];
+
+        // lalu kembalikkan response berupa json
+        return response()->json($response, Response::HTTP_OK);
     }
 
     /**
@@ -95,6 +130,12 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->Transaction->deleteLah($id);
+
+        $response = [
+            'message' => 'Success Delete Data'
+        ];
+
+        return response()->json($response, Response::HTTP_OK); 
     }
 }
