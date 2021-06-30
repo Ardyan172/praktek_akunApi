@@ -27,4 +27,18 @@ class Transaction extends Model
     {
         return DB::table('transactions')->delete($id);
     }
+
+    public function updateData($request, $id) 
+    {
+        $affected = DB::table('transactions')
+                    ->where('id', $id)
+                    ->update([
+                        'nama' => $request->nama,
+                        'jumlah' => $request->jumlah,
+                        'type' => $request->type
+                        // nama, jumlah dan type di dapatkan dari name kalau ada form
+                    ]);
+
+        return $affected;
+    }
 }

@@ -119,7 +119,32 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // validasi dulu
+        $validated = $request->validate([
+            'nama' => ['required', 'min:3', 'max:50'],
+            'jumlah' => ['required', 'min:1000', 'numeric', 'max:10000000'],
+            'type' => [
+                'required',
+                Rule::in(['pemasukan', 'pengeluaran'])
+                // hanya boleh diisi pemasukan atau pengeluaran
+            ]
+        ]);
+
+        try {
+        // try lakukan update data, buat array response lalu return json
+            $data = $this->Transaction->updateData($request, $id);
+            // kirim id lalu method update data yang memperbaruinya
+            $response = [
+                'message' => 'Data berhasil diperbarui',
+                'data' => $data
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch(queryException $e) {
+            // kalau gagal maka tangkap pengecualian query di $e
+            return response()->json('Gagal ' . $e->errorInfo);
+        }
+        // catch queryException $e 
     }
 
     /**

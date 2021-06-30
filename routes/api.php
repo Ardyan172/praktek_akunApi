@@ -15,5 +15,7 @@ Route::post('/transaction/store', [TransactionController::class, 'store']);
 Route::get('/transaction/show/{id}', [TransactionController::class, 'show']);
 // menampilkan data berdasarkan id
 Route::get('/transaction/destroy/{id}', [TransactionController::class, 'destroy']);
+// menghapus data berdasarkan id
+Route::put('/transaction/update/{id}', [TransactionController::class, 'update']);
 
 

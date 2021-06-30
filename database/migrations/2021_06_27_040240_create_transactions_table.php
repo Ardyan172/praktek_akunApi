@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            // nama, jumlah, time, tipe
+            // nama, jumlah, type, waktu
             $table->string('nama');
             $table->double('jumlah');
             // tipe data double karena jumlah angka bisa mengandung koma
